@@ -16,7 +16,9 @@ public class CharacterController : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        //player moves
+        //fix speed while going diagonal
         horizontalInput = Input.GetAxis("Vertical");
         verticalInput = Input.GetAxis("Horizontal");
 
