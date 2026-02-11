@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Runtime.InteropServices;
-using NUnit.Framework;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletsManager : MonoBehaviour
@@ -10,18 +5,23 @@ public class BulletsManager : MonoBehaviour
     public static float maxBullets = 3;
     public static int bCounter = 0;
     public static int bColourIndex = 0;
-    
+
+    [Header ("--- Shot Bullet")]
+    [SerializeField] GameObject[] bColour;
+    [SerializeField] Transform shootingManager;
+
+    [Header ("--- Orbit Bullet")]
     [SerializeField] GameObject bullet;
     [SerializeField] Material bMat;
     [SerializeField] float cdTime;
     
     private bool isOnCD = false;
     private float timeCounter;
-    
+
 
     void Start()
     {
-        SpawnBullet();
+
     }
 
     void Update()
@@ -50,13 +50,26 @@ public class BulletsManager : MonoBehaviour
         Instantiate(bullet, transform);
     }
 
-    public static void ChangeColourIndex(int x)
+    public void ChangeColourIndex(int x)
     {   
         bColourIndex += x;
-        if (bColourIndex >= Shooting.bColour.Length)
-        {
-            bColourIndex -= Shooting.bColour.Length;
-            ChangeColourIndex(0);
-        }
+        bColourIndex %= bColour.Length;
     }
+
+    public void ShotBullet()
+    {
+        Instantiate(bColour[bColourIndex], shootingManager);
+    }
+
+    // public void ResetBullets()
+    // {
+    //     isOnCD = false;
+    //     timeCounter = 0;
+    //     bCounter = 0;
+
+    //     foreach (Transform child in this.transform)
+    //     {
+    //         Destroy(child.gameObject);
+    //     }
+    // }
 }

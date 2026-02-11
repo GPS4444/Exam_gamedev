@@ -1,14 +1,17 @@
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
-public class CharacterController : MonoBehaviour
-{ 
+public class CharacterControllerPlayer : MonoBehaviour
+{
+    public BulletsManager bulletsManager;
+    public GameManager gameManager;
+
     [SerializeField] Camera gameCamera;
     [SerializeField] float pSpeed;
     [SerializeField] float pHeight;
     [SerializeField] float floatingSpeed;
     [SerializeField] float floatingHeight;
+
     private Vector3 direction;
     public static Ray mouseRay;
     private float horizontalInput;
@@ -17,7 +20,7 @@ public class CharacterController : MonoBehaviour
 
     void Start()
     {
-        transform.position = new (0, pHeight, 0);
+        ResetPlayer();
     }
 
     void Update()
@@ -27,6 +30,16 @@ public class CharacterController : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
         direction = new (horizontalInput, 0, verticalInput);
+
+        //limit player movement to bounds
+        if (transform.position.x > gameManager.mapSizeX && horizontalInput > 0)
+            direction.x = 0;
+        else if (transform.position.x < - gameManager.mapSizeX && horizontalInput < 0)
+            direction.x = 0;
+        if (transform.position.z > gameManager.mapSizeZ && verticalInput > 0)
+            direction.z = 0;
+        else if (transform.position.z < - gameManager.mapSizeZ && verticalInput < 0)
+            direction.z = 0;
 
         transform.Translate(pSpeed * Time.deltaTime  * direction.normalized, Space.World);
 
@@ -45,8 +58,23 @@ public class CharacterController : MonoBehaviour
         //change bullet colour by pressing space
         if (Input.GetKeyDown(KeyCode.Space))
         {   
-            print(BulletsManager.bColourIndex);
-            BulletsManager.ChangeColourIndex(1);
+            bulletsManager.ChangeColourIndex(1);
         }
+        
+        if (Input.GetMouseButtonDown(0) && BulletsManager.bCounter > 0)
+        {
+            bulletsManager.ShotBullet();
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Blue") || other.CompareTag("Green") || other.CompareTag("Magenta"))
+            gameManager.GameOver();
+    }
+
+    public void ResetPlayer()
+    {
+        transform.position = new (0, pHeight, 0);
     }
 }

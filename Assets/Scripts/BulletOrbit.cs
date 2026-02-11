@@ -1,13 +1,10 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class BulletOrbit : MonoBehaviour
 {
     [Header("--- Bullet Orbit")]
     [SerializeField] float scale;
     [SerializeField] float speed;
-
-    [Header("--- Shot")]
-    [SerializeField] float shotSpeed;
 
     [Header("--- Colours")]
     [SerializeField] Color32 magenta = new Color32(255, 74, 164, 255);
@@ -26,7 +23,7 @@ public class Bullet : MonoBehaviour
         bName = BulletsManager.bCounter;
         player = GameObject.Find("Player");
         bMaterial = GetComponent<Renderer>().material;
-
+        
         //particles = GetComponentInChildren<ParticleSystem>();
         //particles.Play();
     }
@@ -61,8 +58,6 @@ public class Bullet : MonoBehaviour
             Destroy(transform.parent.gameObject);
         }
     }
-
-    
 }
 
 

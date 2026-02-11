@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Skull_v4_Magenta
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 691492ad5dbbfad4e8fe02aaf08aa3af, type: 3}
+      propertyPath: m_TagString
+      value: Magenta
+      objectReference: {fileID: 0}
     - target: {fileID: 2289886375126889151, guid: 691492ad5dbbfad4e8fe02aaf08aa3af, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -164,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   floatingHeight: 3
+  healthPoints: 2
 --- !u!4 &7931336745926931692 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4119095730394526224, guid: 691492ad5dbbfad4e8fe02aaf08aa3af, type: 3}

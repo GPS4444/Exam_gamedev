@@ -1,12 +1,16 @@
-using System.Runtime.CompilerServices;
+using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    private GameObject player;
-    private Rigidbody rb;
     [SerializeField] float speed;
     [SerializeField] float floatingHeight;
+    [SerializeField] int healthPoints = 2;
+
+    private GameObject player;
+    private Rigidbody rb;
+    private ParticleSystem[] particles;
 
     void Start()
     {
@@ -14,6 +18,10 @@ public class EnemyBehaviour : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         rb.position = new (transform.position.x, floatingHeight, transform.position.z);
+
+        particles = GetComponentsInChildren<ParticleSystem>();
+        particles[0].Play();
+        particles[1].Play();
     }
 
     void Update()
@@ -27,5 +35,18 @@ public class EnemyBehaviour : MonoBehaviour
         
         //turn towards player
         rb.rotation = Quaternion.Euler(0, Functions.VectorToAngle(toTarget), 0);
-    }   
+
+        //reset height
+        rb.position = new (transform.position.x, floatingHeight, transform.position.z);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        healthPoints -= damage;
+        if (healthPoints <= 0)
+        {
+            Destroy(gameObject);
+            GameManager.enemiesDefeated += 1;
+        }
+    }
 }
