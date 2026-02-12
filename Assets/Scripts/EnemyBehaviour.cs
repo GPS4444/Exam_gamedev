@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    [SerializeField] float speed;
+    public static float speed = 5;
+    [SerializeField] float enemySpeed = 5;
     [SerializeField] float floatingHeight;
     [SerializeField] int healthPoints = 2;
 
@@ -14,6 +15,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Start()
     {
+        speed = enemySpeed;
+        
         player = GameObject.FindWithTag("Player");
 
         rb = GetComponent<Rigidbody>();

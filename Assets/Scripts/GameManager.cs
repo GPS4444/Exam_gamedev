@@ -1,8 +1,10 @@
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,8 +20,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Volume globalVolume;
 
     [Header ("--- Wave")]
-    [SerializeField] int nEnemiesStart;
+    [SerializeField] int nEnemiesPerWave;
     [SerializeField] int enemyIncrement;
+    [SerializeField] float speedIncrement;
+    [SerializeField] float timePerWave;
+    [SerializeField] float playerCDReduction;
+    [SerializeField] float playerMinimumCD;
     
     [Header("--- Bounds")]
     public float mapSizeX;
@@ -27,28 +33,42 @@ public class GameManager : MonoBehaviour
     [SerializeField] float playerSafeZone;
 
     private int enemyIndex;
-    private int nEnemiesPerWave;
     private float timer;
 
     void Start()
     {
-        
+        timer = 0;
+        enemiesDefeated = 0;
     }
 
     void Update()
     {
         txtScore.text = "ENEMIES DEFEATED: " + enemiesDefeated;
 
-
-        if (Input.GetKeyDown(KeyCode.E))
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     SpawnWave(nEnemiesPerWave);
+        // }
+        
+        if (timer < timePerWave)
         {
-            SpawnWave(nEnemiesStart);
+            timer += Time.deltaTime;
+        }
+        else
+        {
+            timer = 0;
+            SpawnWave(nEnemiesPerWave);
+            EnemyBehaviour.speed += speedIncrement;
+            BulletsManager.cdTime -= playerCDReduction;
+            if (BulletsManager.cdTime < playerMinimumCD)
+                BulletsManager.cdTime = playerMinimumCD;
+            nEnemiesPerWave += enemyIncrement;   
         }
     }
 
         void SpawnWave(int n)
     {
-        for(int i = 0; i <= n; i++)
+        for (int i = 0; i <= n; i++)
         {   
             enemyIndex = Random.Range(0, enemiesArray.Length);
 
@@ -74,16 +94,10 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
         txtGameOver.gameObject.SetActive(true);
-        //globalVolume.gameObject.SetActive
     }
 
-    
+    public void GameRestart()
+    {
+        SceneManager.LoadScene("Game");
+    }
 }
-
-    // public void GameStart()
-    // {
-    //     enemiesDefeated = 0;
-    //     txtGameOver.gameObject.SetActive(false);
-    //     player.GetComponent<CharacterControllerPlayer>().ResetPlayer();
-    //     bulletManager.GetComponent<BulletsManager>().ResetBullets();
-    // }

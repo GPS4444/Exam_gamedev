@@ -5,6 +5,7 @@ public class BulletsManager : MonoBehaviour
     public static float maxBullets = 3;
     public static int bCounter = 0;
     public static int bColourIndex = 0;
+    public static float cdTime = 2;
 
     [Header ("--- Shot Bullet")]
     [SerializeField] GameObject[] bColour;
@@ -13,7 +14,8 @@ public class BulletsManager : MonoBehaviour
     [Header ("--- Orbit Bullet")]
     [SerializeField] GameObject bullet;
     [SerializeField] Material bMat;
-    [SerializeField] float cdTime;
+    [SerializeField] float BulletCDTime = 2;
+
     
     private bool isOnCD = false;
     private float timeCounter;
@@ -21,7 +23,10 @@ public class BulletsManager : MonoBehaviour
 
     void Start()
     {
-
+        isOnCD = false;
+        timeCounter = 0;
+        bCounter = 0;
+        cdTime = BulletCDTime;
     }
 
     void Update()
